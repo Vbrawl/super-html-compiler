@@ -8,12 +8,12 @@ it's place.
 
 Then run:
 ```bash
-npm install -g @vweb-original/html-compiler
+npm install -g super-html-compiler
 html-compile input.html output.html
 
 OR
 
-npm install @vweb-original/html-compiler --save-dev
+npm install super-html-compiler --save-dev
 npx html-compile input.html output.html
 ```
 

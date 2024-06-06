@@ -1,5 +1,5 @@
 {
-  "name": "@vweb-original/html-compiler",
+  "name": "super-html-compiler",
   "version": "1.0.0",
   "description": "An HTML compiler that will combine multiple html files into one that can be loaded in a browser.",
   "main": "build/compiler.js",
@@ -15,7 +15,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/Vbrawl/html-compiler.git"
+    "url": "git+https://github.com/Vbrawl/super-html-compiler.git"
   },
   "keywords": [
     "html",
@@ -25,9 +25,9 @@
   "author": "Vbrawl",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/Vbrawl/html-compiler/issues"
+    "url": "https://github.com/Vbrawl/super-html-compiler/issues"
   },
-  "homepage": "https://github.com/Vbrawl/html-compiler#readme",
+  "homepage": "https://github.com/Vbrawl/super-html-compiler#readme",
   "dependencies": {
     "commander": "^12.1.0",
     "node-html-parser": "^6.1.13"
