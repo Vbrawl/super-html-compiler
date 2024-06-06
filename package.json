@@ -1,0 +1,44 @@
+{
+  "name": "@vweb-original/html-compiler",
+  "version": "1.0.0",
+  "description": "An HTML compiler that will combine multiple html files into one that can be loaded in a browser.",
+  "main": "build/compiler.js",
+  "typings": "build/compiler.d.ts",
+  "engines": {
+    "node": ">=18"
+  },
+  "bin": {
+    "html-compile": "build/index.js"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Vbrawl/html-compiler.git"
+  },
+  "keywords": [
+    "html",
+    "compiler",
+    "combine"
+  ],
+  "author": "Vbrawl",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Vbrawl/html-compiler/issues"
+  },
+  "homepage": "https://github.com/Vbrawl/html-compiler#readme",
+  "dependencies": {
+    "commander": "^12.1.0",
+    "node-html-parser": "^6.1.13"
+  },
+  "devDependencies": {
+    "@types/commander": "^2.12.2",
+    "@types/node": "^20.14.2",
+    "@types/typescript": "^2.0.0",
+    "grunt": "^1.6.1",
+    "grunt-ts": "^6.0.0-beta.22",
+    "tsup": "^8.1.0",
+    "typescript": "^5.4.5"
+  }
+}
