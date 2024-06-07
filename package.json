@@ -1,6 +1,6 @@
 {
   "name": "super-html-compiler",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "An HTML compiler that will combine multiple html files into one that can be loaded in a browser.",
   "main": "build/compiler.js",
   "typings": "build/compiler.d.ts",
