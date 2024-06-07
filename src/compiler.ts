@@ -13,12 +13,15 @@ export class Compiler {
         const root = await this.load_file(input_file);
 
         var statics = root.getElementsByTagName("static-import");
-        for (let i = 0; i < statics.length; i++) {
-            const static_import = statics[i];
-            if(static_import !== undefined) {
-                const import_path = path.resolve(this.cwd, static_import.innerText);
-                static_import.replaceWith(await this.load_file(import_path));
+        while (statics.length !== 0) {
+            for (let i = 0; i < statics.length; i++) {
+                const static_import = statics[i];
+                if(static_import !== undefined) {
+                    const import_path = path.resolve(this.cwd, static_import.innerText);
+                    static_import.replaceWith(await this.load_file(import_path));
+                }
             }
+            statics = root.getElementsByTagName("static-import");
         }
 
         await writeFile(output_file, root.outerHTML);
