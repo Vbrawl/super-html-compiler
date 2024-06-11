@@ -73,7 +73,7 @@ module.exports = function(grunt) {
 
                 if(ef.equals(af))   { grunt.log.write("[+]"["green"]); }
                 else                { grunt.log.write("[-]"["red"]); }
-                grunt.log.writeln(`${expected_file_path} == ${actual_file_path}`);
+                grunt.log.writeln(' ' + file_name);
             }
         }(options)).then(done);
     });
