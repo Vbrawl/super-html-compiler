@@ -72,3 +72,11 @@ html-compile src/index.template.html out/index.html
     </body>
 </html>
 ```
+
+
+# All available tags and their uses
+
+| name               | description                                                                                                                                 |
+|--------------------|---------------------------------------------------------------------------------------------------------------------------------------------|
+| static-import      | Allows to include external resources to the final html. (Note: The resources are simply copy-pasted)                                        |
+| static-requirement | Add all contents of this tag to the head of the final html (if a head exists). Can be used to define requirements inside of external resources. |
