@@ -22,6 +22,20 @@ class Compiler {
             }
             statics = root.getElementsByTagName("static-import");
         }
+        const all_heads = root.getElementsByTagName("head");
+        if (all_heads.length === 1 && all_heads[0] !== undefined) {
+            const head = all_heads[0];
+            var requirements = root.getElementsByTagName("static-requirement");
+            while (requirements.length !== 0) {
+                for (let static_requirement = requirements.pop(); static_requirement !== undefined; static_requirement = requirements.pop()) {
+                    while (static_requirement.firstChild !== undefined) {
+                        head.appendChild(static_requirement.firstChild);
+                    }
+                    static_requirement.remove();
+                }
+                break;
+            }
+        }
         await (0, promises_1.writeFile)(output_file, root.outerHTML);
     }
     async load_file(file) {
