@@ -37,7 +37,7 @@
     "@types/node": "^20.14.2",
     "@types/typescript": "^2.0.0",
     "grunt": "^1.6.1",
-    "grunt-ts": "^6.0.0-beta.22",
+    "grunt-ts": "^5.5.1",
     "typescript": "^5.4.5"
   }
 }
