@@ -11,7 +11,23 @@ class Compiler {
     }
     async compile_file(input_file, output_file) {
         const root = await this.load_file(input_file);
+        const all_heads = root.getElementsByTagName("head");
+        var head = undefined;
+        if (all_heads.length === 1 && all_heads[0] !== undefined) {
+            head = all_heads[0];
+        }
+        var action_taken = true;
+        while (action_taken) {
+            action_taken = false;
+            action_taken = action_taken || await this.replace_imports(root);
+            if (head)
+                action_taken = action_taken || await this.replace_requirements(root, head);
+        }
+        await (0, promises_1.writeFile)(output_file, root.outerHTML);
+    }
+    async replace_imports(root) {
         var statics = root.getElementsByTagName("static-import");
+        const action_taken = statics.length !== 0;
         while (statics.length !== 0) {
             for (let i = 0; i < statics.length; i++) {
                 const static_import = statics[i];
@@ -22,21 +38,20 @@ class Compiler {
             }
             statics = root.getElementsByTagName("static-import");
         }
-        const all_heads = root.getElementsByTagName("head");
-        if (all_heads.length === 1 && all_heads[0] !== undefined) {
-            const head = all_heads[0];
-            var requirements = root.getElementsByTagName("static-requirement");
-            while (requirements.length !== 0) {
-                for (let static_requirement = requirements.pop(); static_requirement !== undefined; static_requirement = requirements.pop()) {
-                    while (static_requirement.firstChild !== undefined) {
-                        head.appendChild(static_requirement.firstChild);
-                    }
-                    static_requirement.remove();
+        return action_taken;
+    }
+    async replace_requirements(root, output) {
+        var requirements = root.getElementsByTagName("static-requirement");
+        const action_taken = requirements.length !== 0;
+        while (requirements.length !== 0) {
+            for (let static_requirement = requirements.pop(); static_requirement !== undefined; static_requirement = requirements.pop()) {
+                while (static_requirement.firstChild !== undefined) {
+                    output.appendChild(static_requirement.firstChild);
                 }
-                break;
+                static_requirement.remove();
             }
         }
-        await (0, promises_1.writeFile)(output_file, root.outerHTML);
+        return action_taken;
     }
     async load_file(file) {
         return (0, node_html_parser_1.parse)(await (0, promises_1.readFile)(file, "utf-8"));
