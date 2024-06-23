@@ -36,7 +36,8 @@ module.exports = function(grunt) {
 
 
     grunt.registerTask("test", ["super_html_compiler", "file_compare"]);
-    grunt.registerTask("default", ["ts"]);
+    grunt.registerTask("build", ["ts"]);
+    grunt.registerTask("default", ["build", "test"]);
 
 
     grunt.registerMultiTask("file_compare", "Compare all files under actual_results_folder and expected_results_folder", function() {
