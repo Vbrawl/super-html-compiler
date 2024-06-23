@@ -22,7 +22,7 @@ export class Compiler {
         while(action_taken) {
             action_taken = false;
             action_taken = await this.replace_imports(root) || action_taken;
-            if(head) action_taken = await this.replace_requirements(root, head) || action_taken;
+            if(head) action_taken = this.replace_requirements(root, head) || action_taken;
         }
 
         await writeFile(output_file, htmlPrettyPrint(root.outerHTML));
@@ -44,7 +44,7 @@ export class Compiler {
         return action_taken;
     }
 
-    async replace_requirements(root:HTMLElement, output:HTMLElement): Promise<boolean> {
+    replace_requirements(root:HTMLElement, output:HTMLElement): boolean {
         var requirements = root.getElementsByTagName("static-requirement");
         const action_taken = requirements.length !== 0;
         while (requirements.length !== 0) {
