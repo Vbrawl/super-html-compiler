@@ -3,11 +3,6 @@ const fs = require("node:fs/promises");
 
 module.exports = function(grunt) {
     grunt.initConfig({
-        ts: {
-            options: { fast: "never" },
-            build: { tsconfig: true, }
-        },
-
         super_html_compiler: {
             test: {
                 files: [{
@@ -27,16 +22,21 @@ module.exports = function(grunt) {
                     actual_results_folder: "tests/actual_results"
                 }
             }
+        },
+
+        exec: {
+            ts: {
+                command: "npx tsc"
+            }
         }
     });
 
     grunt.loadTasks("tasks");
-
-    grunt.loadNpmTasks("grunt-ts");
+    grunt.loadNpmTasks("grunt-exec");
 
 
     grunt.registerTask("test", ["super_html_compiler", "file_compare"]);
-    grunt.registerTask("build", ["ts"]);
+    grunt.registerTask("build", ["exec:ts"]);
     grunt.registerTask("default", ["build", "test"]);
 
 

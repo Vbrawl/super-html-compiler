@@ -30,6 +30,7 @@
   "homepage": "https://github.com/Vbrawl/super-html-compiler#readme",
   "dependencies": {
     "commander": "^12.1.0",
+    "html-prettify": "^1.0.7",
     "node-html-parser": "^6.1.13"
   },
   "devDependencies": {
@@ -37,7 +38,7 @@
     "@types/node": "^20.14.2",
     "@types/typescript": "^2.0.0",
     "grunt": "^1.6.1",
-    "grunt-ts": "^5.5.1",
+    "grunt-exec": "^3.0.0",
     "typescript": "^5.4.5"
   }
 }

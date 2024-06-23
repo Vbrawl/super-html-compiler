@@ -3,6 +3,7 @@
         "target": "ES2022",
         "module": "CommonJS",
         "strict": true,
+        "esModuleInterop": true,
         "alwaysStrict": true,
         "noErrorTruncation": true,
         "noFallthroughCasesInSwitch": true,
