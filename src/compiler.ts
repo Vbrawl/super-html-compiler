@@ -29,11 +29,8 @@ export class Compiler {
             this.remove_duplicates(fake_head);
         }
 
-        // Compile fake head into real head
-        const all_heads = root.getElementsByTagName("head");
-        if(all_heads.length === 1 && all_heads[0] !== undefined) {
-            all_heads[0].insertAdjacentHTML('beforeend', fake_head.innerHTML);
-        }
+        // Compile requirements inside the result HTML
+        this.place_requirements(root, fake_head);
 
         await writeFile(output_file, htmlPrettyPrint(root.outerHTML));
     }
@@ -86,6 +83,42 @@ export class Compiler {
             }
         }
         return action_taken;
+    }
+
+    place_requirements(root:HTMLElement, fake_head:HTMLElement) {
+        var requirement_placeholder = new HTMLElement("static-requirement-placeholder", {});
+        var placeholder_found = false;
+
+        const heads = root.getElementsByTagName("head");
+        const requirement_placeholders = root.getElementsByTagName("static-requirement-placeholder");
+
+        // Error checking!
+        if(heads.length > 1) {
+            throw new Error("Invalid Document: Multiple <head> tags found!");
+        }
+        if(requirement_placeholders.length > 1) {
+            throw new Error("Invalid Document: Multiple <static-requirement-placeholder> tags found!");
+        }
+
+        // Find placeholder
+        if(requirement_placeholders.length === 1 && requirement_placeholders[0] !== undefined) {
+            requirement_placeholder = requirement_placeholders[0];
+            placeholder_found = true;
+        }
+        else if(heads.length === 1 && heads[0] !== undefined) {
+            heads[0].appendChild(requirement_placeholder);
+            placeholder_found = true;
+        }
+        else {
+            // That's still valid HTML but we should warn the user.
+            console.warn("No <head> or <static-requirement-placeholder> tags found, requirements were not added to the document!");
+        }
+
+        if(placeholder_found) {
+            requirement_placeholder.insertAdjacentHTML('beforebegin', fake_head.innerHTML);
+            requirement_placeholder.remove();
+        }
+        return placeholder_found;
     }
 
     async load_file(file:string): Promise<HTMLElement> {

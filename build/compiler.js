@@ -24,10 +24,7 @@ class Compiler {
         if (!this.allow_duplicated_requirements) {
             this.remove_duplicates(fake_head);
         }
-        const all_heads = root.getElementsByTagName("head");
-        if (all_heads.length === 1 && all_heads[0] !== undefined) {
-            all_heads[0].insertAdjacentHTML('beforeend', fake_head.innerHTML);
-        }
+        this.place_requirements(root, fake_head);
         await (0, promises_1.writeFile)(output_file, (0, html_1.prettyPrint)(root.outerHTML));
     }
     async replace_imports(root) {
@@ -59,6 +56,7 @@ class Compiler {
         return action_taken;
     }
     remove_duplicates(container) {
+        var action_taken = false;
         for (let i = 0; i < container.childNodes.length; i++) {
             const node = container.childNodes[i];
             if (!node)
@@ -69,10 +67,40 @@ class Compiler {
                     continue;
                 if (node.toString() === jnode.toString()) {
                     jnode.remove();
+                    action_taken = true;
                     j--;
                 }
             }
         }
+        return action_taken;
+    }
+    place_requirements(root, fake_head) {
+        var requirement_placeholder = new node_html_parser_1.HTMLElement("static-requirement-placeholder", {});
+        var placeholder_found = false;
+        const heads = root.getElementsByTagName("head");
+        const requirement_placeholders = root.getElementsByTagName("static-requirement-placeholder");
+        if (heads.length > 1) {
+            throw new Error("Invalid Document: Multiple <head> tags found!");
+        }
+        if (requirement_placeholders.length > 1) {
+            throw new Error("Invalid Document: Multiple <static-requirement-placeholder> tags found!");
+        }
+        if (requirement_placeholders.length === 1 && requirement_placeholders[0] !== undefined) {
+            requirement_placeholder = requirement_placeholders[0];
+            placeholder_found = true;
+        }
+        else if (heads.length === 1 && heads[0] !== undefined) {
+            heads[0].appendChild(requirement_placeholder);
+            placeholder_found = true;
+        }
+        else {
+            console.warn("No <head> or <static-requirement-placeholder> tags found, requirements were not added to the document!");
+        }
+        if (placeholder_found) {
+            requirement_placeholder.insertAdjacentHTML('beforebegin', fake_head.innerHTML);
+            requirement_placeholder.remove();
+        }
+        return placeholder_found;
     }
     async load_file(file) {
         return (0, node_html_parser_1.parse)(await (0, promises_1.readFile)(file, "utf-8"));
