@@ -31,14 +31,16 @@ module.exports = function(grunt) {
         }
     });
 
-    grunt.loadTasks("tasks");
     grunt.loadNpmTasks("grunt-exec");
 
 
-    grunt.registerTask("test", ["super_html_compiler", "file_compare"]);
+    grunt.registerTask("test", "Load tasks directory and call the super_html_copmiler and file_compare tasks", function() {
+        grunt.loadTasks("tasks");
+        grunt.task.run("super_html_compiler");
+        grunt.task.run("file_compare");
+    });
     grunt.registerTask("build", ["exec:ts"]);
     grunt.registerTask("default", ["build", "test"]);
-
 
     grunt.registerMultiTask("file_compare", "Compare all files under actual_results_folder and expected_results_folder", function() {
         var done = this.async();
