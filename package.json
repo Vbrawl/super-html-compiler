@@ -32,7 +32,6 @@
     "@types/html": "^1.0.4",
     "commander": "^12.1.0",
     "html": "^1.0.0",
-    "html-prettify": "^1.0.7",
     "node-html-parser": "^6.1.13"
   },
   "devDependencies": {
