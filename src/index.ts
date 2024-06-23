@@ -19,7 +19,6 @@ function compile(input_file:string, output_file:string, options:IOptions) {
 
 
 commander.program
-            .version("1.0.0")
             .description("Compile separated HTML files to a single HTML file."  )
             .argument("<input file>",               "File to compile")
             .argument("<output file>",              "Output file")

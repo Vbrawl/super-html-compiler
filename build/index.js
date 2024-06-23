@@ -8,7 +8,6 @@ function compile(input_file, output_file, options) {
     console.log(`${output_file}: Created from ${input_file}`);
 }
 commander.program
-    .version("1.0.0")
     .description("Compile separated HTML files to a single HTML file.")
     .argument("<input file>", "File to compile")
     .argument("<output file>", "Output file")
