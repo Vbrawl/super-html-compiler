@@ -29,7 +29,9 @@
   },
   "homepage": "https://github.com/Vbrawl/super-html-compiler#readme",
   "dependencies": {
+    "@types/html": "^1.0.4",
     "commander": "^12.1.0",
+    "html": "^1.0.0",
     "html-prettify": "^1.0.7",
     "node-html-parser": "^6.1.13"
   },

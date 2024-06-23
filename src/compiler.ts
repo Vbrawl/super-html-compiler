@@ -1,4 +1,5 @@
 import { parse, HTMLElement } from "node-html-parser";
+import { prettyPrint as htmlPrettyPrint } from "html";
 import { readFile, writeFile } from "node:fs/promises";
 import * as path from "node:path";
 
@@ -24,7 +25,7 @@ export class Compiler {
             if(head) action_taken = await this.replace_requirements(root, head) || action_taken;
         }
 
-        await writeFile(output_file, root.outerHTML);
+        await writeFile(output_file, htmlPrettyPrint(root.outerHTML));
     }
 
     async replace_imports(root:HTMLElement): Promise<boolean> {

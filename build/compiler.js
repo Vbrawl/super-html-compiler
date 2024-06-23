@@ -2,6 +2,7 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Compiler = void 0;
 const node_html_parser_1 = require("node-html-parser");
+const html_1 = require("html");
 const promises_1 = require("node:fs/promises");
 const path = require("node:path");
 class Compiler {
@@ -23,7 +24,7 @@ class Compiler {
             if (head)
                 action_taken = await this.replace_requirements(root, head) || action_taken;
         }
-        await (0, promises_1.writeFile)(output_file, root.outerHTML);
+        await (0, promises_1.writeFile)(output_file, (0, html_1.prettyPrint)(root.outerHTML));
     }
     async replace_imports(root) {
         var statics = root.getElementsByTagName("static-import");
