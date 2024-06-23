@@ -20,8 +20,8 @@ export class Compiler {
         var action_taken = true;
         while(action_taken) {
             action_taken = false;
-            action_taken = action_taken || await this.replace_imports(root);
-            if(head) action_taken = action_taken || await this.replace_requirements(root, head);
+            action_taken = await this.replace_imports(root) || action_taken;
+            if(head) action_taken = await this.replace_requirements(root, head) || action_taken;
         }
 
         await writeFile(output_file, root.outerHTML);

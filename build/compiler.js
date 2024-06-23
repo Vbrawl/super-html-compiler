@@ -19,9 +19,9 @@ class Compiler {
         var action_taken = true;
         while (action_taken) {
             action_taken = false;
-            action_taken = action_taken || await this.replace_imports(root);
+            action_taken = await this.replace_imports(root) || action_taken;
             if (head)
-                action_taken = action_taken || await this.replace_requirements(root, head);
+                action_taken = await this.replace_requirements(root, head) || action_taken;
         }
         await (0, promises_1.writeFile)(output_file, root.outerHTML);
     }
