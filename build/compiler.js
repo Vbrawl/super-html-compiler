@@ -12,17 +12,16 @@ class Compiler {
     }
     async compile_file(input_file, output_file) {
         const root = await this.load_file(input_file);
-        const all_heads = root.getElementsByTagName("head");
-        var head = undefined;
-        if (all_heads.length === 1 && all_heads[0] !== undefined) {
-            head = all_heads[0];
-        }
+        const fake_head = new node_html_parser_1.HTMLElement("head", {});
         var action_taken = true;
         while (action_taken) {
             action_taken = false;
             action_taken = await this.replace_imports(root) || action_taken;
-            if (head)
-                action_taken = await this.replace_requirements(root, head) || action_taken;
+            action_taken = this.replace_requirements(root, fake_head) || action_taken;
+        }
+        const all_heads = root.getElementsByTagName("head");
+        if (all_heads.length === 1 && all_heads[0] !== undefined) {
+            all_heads[0].insertAdjacentHTML('beforeend', fake_head.innerHTML);
         }
         await (0, promises_1.writeFile)(output_file, (0, html_1.prettyPrint)(root.outerHTML));
     }
@@ -41,7 +40,7 @@ class Compiler {
         }
         return action_taken;
     }
-    async replace_requirements(root, output) {
+    replace_requirements(root, output) {
         var requirements = root.getElementsByTagName("static-requirement");
         const action_taken = requirements.length !== 0;
         while (requirements.length !== 0) {

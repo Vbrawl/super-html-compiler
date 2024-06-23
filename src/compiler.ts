@@ -12,17 +12,20 @@ export class Compiler {
 
     async compile_file(input_file:string, output_file:string) {
         const root = await this.load_file(input_file);
-        const all_heads = root.getElementsByTagName("head");
-        var head = undefined;
-        if(all_heads.length === 1 && all_heads[0] !== undefined) {
-            head = all_heads[0];
-        }
+        const fake_head = new HTMLElement("head", {});
         
+        // Parse and compile
         var action_taken = true;
         while(action_taken) {
             action_taken = false;
             action_taken = await this.replace_imports(root) || action_taken;
-            if(head) action_taken = this.replace_requirements(root, head) || action_taken;
+            action_taken = this.replace_requirements(root, fake_head) || action_taken;
+        }
+
+        // Compile fake head into real head
+        const all_heads = root.getElementsByTagName("head");
+        if(all_heads.length === 1 && all_heads[0] !== undefined) {
+            all_heads[0].insertAdjacentHTML('beforeend', fake_head.innerHTML);
         }
 
         await writeFile(output_file, htmlPrettyPrint(root.outerHTML));

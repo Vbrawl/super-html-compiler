@@ -4,6 +4,6 @@ export declare class Compiler {
     constructor(cwd: string);
     compile_file(input_file: string, output_file: string): Promise<void>;
     replace_imports(root: HTMLElement): Promise<boolean>;
-    replace_requirements(root: HTMLElement, output: HTMLElement): Promise<boolean>;
+    replace_requirements(root: HTMLElement, output: HTMLElement): boolean;
     load_file(file: string): Promise<HTMLElement>;
 }
