@@ -7,8 +7,10 @@ const promises_1 = require("node:fs/promises");
 const path = require("node:path");
 class Compiler {
     cwd;
-    constructor(cwd) {
+    allow_duplicated_requirements;
+    constructor(cwd, allow_duplicated_requirements = false) {
         this.cwd = path.resolve(process.cwd(), cwd);
+        this.allow_duplicated_requirements = allow_duplicated_requirements;
     }
     async compile_file(input_file, output_file) {
         const root = await this.load_file(input_file);
@@ -18,6 +20,9 @@ class Compiler {
             action_taken = false;
             action_taken = await this.replace_imports(root) || action_taken;
             action_taken = this.replace_requirements(root, fake_head) || action_taken;
+        }
+        if (!this.allow_duplicated_requirements) {
+            this.remove_duplicates(fake_head);
         }
         const all_heads = root.getElementsByTagName("head");
         if (all_heads.length === 1 && all_heads[0] !== undefined) {
@@ -52,6 +57,22 @@ class Compiler {
             }
         }
         return action_taken;
+    }
+    remove_duplicates(container) {
+        for (let i = 0; i < container.childNodes.length; i++) {
+            const node = container.childNodes[i];
+            if (!node)
+                continue;
+            for (let j = i + 1; j < container.childNodes.length; j++) {
+                const jnode = container.childNodes[j];
+                if (!jnode)
+                    continue;
+                if (node.toString() === jnode.toString()) {
+                    jnode.remove();
+                    j--;
+                }
+            }
+        }
     }
     async load_file(file) {
         return (0, node_html_parser_1.parse)(await (0, promises_1.readFile)(file, "utf-8"));

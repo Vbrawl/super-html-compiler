@@ -5,9 +5,11 @@ import * as path from "node:path";
 
 export class Compiler {
     cwd:string;
+    allow_duplicated_requirements:boolean;
 
-    constructor(cwd:string) {
+    constructor(cwd:string, allow_duplicated_requirements:boolean = false) {
         this.cwd = path.resolve(process.cwd(), cwd);
+        this.allow_duplicated_requirements = allow_duplicated_requirements;
     }
 
     async compile_file(input_file:string, output_file:string) {
@@ -20,6 +22,11 @@ export class Compiler {
             action_taken = false;
             action_taken = await this.replace_imports(root) || action_taken;
             action_taken = this.replace_requirements(root, fake_head) || action_taken;
+        }
+
+        // Remove duplicated requirements
+        if(!this.allow_duplicated_requirements) {
+            this.remove_duplicates(fake_head);
         }
 
         // Compile fake head into real head
@@ -56,6 +63,26 @@ export class Compiler {
                     output.appendChild(static_requirement.firstChild);
                 }
                 static_requirement.remove();
+            }
+        }
+        return action_taken;
+    }
+
+    remove_duplicates(container:HTMLElement) : boolean {
+        var action_taken = false;
+        for (let i = 0; i < container.childNodes.length; i++) {
+            const node = container.childNodes[i];
+            if(!node) continue;
+
+            for (let j = i+1; j < container.childNodes.length; j++) {
+                const jnode = container.childNodes[j];
+                if(!jnode) continue;
+
+                if(node.toString() === jnode.toString()) {
+                    jnode.remove();
+                    action_taken = true;
+                    j--;
+                }
             }
         }
         return action_taken;
