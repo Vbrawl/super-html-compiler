@@ -1,5 +1,6 @@
 const path = require("node:path");
 const fs = require("node:fs/promises");
+const html = require("html");
 
 module.exports = function(grunt) {
     grunt.initConfig({
@@ -71,10 +72,10 @@ module.exports = function(grunt) {
                 const expected_file_path = path.join(options.expected_results_folder, file_name);
                 const actual_file_path = path.join(options.actual_results_folder, file_name);
 
-                const ef = await fs.readFile(expected_file_path);
-                const af = await fs.readFile(actual_file_path);
+                const ef = html.prettyPrint((await fs.readFile(expected_file_path)).toString());
+                const af = html.prettyPrint((await fs.readFile(actual_file_path)).toString());
 
-                if(ef.equals(af))   { grunt.log.write("[+]"["green"]); }
+                if(ef === af)   { grunt.log.write("[+]"["green"]); }
                 else                { grunt.log.write("[-]"["red"]); }
                 grunt.log.writeln(' ' + file_name);
             }
