@@ -8,7 +8,8 @@ module.exports = function(grunt) {
     grunt.registerMultiTask('super_html_compiler', 'A task to compile html using grunt.', function() {
         var done = this.async();
         const options = this.options({
-            cwd: undefined
+            cwd: undefined,
+            allow_duplicated_requirements: false
         });
 
         (async function(done, options, files){
