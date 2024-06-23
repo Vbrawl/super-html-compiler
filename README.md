@@ -80,3 +80,23 @@ html-compile src/index.template.html out/index.html
 |--------------------|---------------------------------------------------------------------------------------------------------------------------------------------|
 | static-import      | Allows to include external resources to the final html. (Note: The resources are simply copy-pasted)                                        |
 | static-requirement | Add all contents of this tag to the head of the final html (if a head exists). Can be used to define requirements inside of external resources. |
+
+# CLI options
+| short name | long name                         | default | description                                                       |
+|------------|-----------------------------------|---------|-------------------------------------------------------------------|
+| `-p`       | `--project-root`                  | `.`     | The `path` to prepend to all `paths` in `<static-*>` tags         |
+|            | `--allow-duplicated-requirements` | `false` | Wether to allow the specification of a requirement multiple times |
+
+# JS options
+## Class: Compiler
+| name                          | type      | default     | description                                                       |
+|-------------------------------|-----------|-------------|-------------------------------------------------------------------|
+| cwd                           | `string`  |             | The `path` to prepend to all `paths` in `<static-*>` tags         |
+| allow_duplicated_requirements | `boolean` | `false`     | Wether to allow the specification of a requirement multiple times |
+
+# GRUNT options
+## Task: super_html_compiler
+| name                          | type      | default | description                                                       |
+|-------------------------------|-----------|---------|-------------------------------------------------------------------|
+| cwd                           | `string`  | `.`     | The `path` to prepend to all `paths` in `<static-*>` tags         |
+| allow_duplicated_requirements | `boolean` | `false` | Wether to allow the specification of a requirement multiple times |
