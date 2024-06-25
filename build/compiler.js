@@ -5,6 +5,29 @@ const node_html_parser_1 = require("node-html-parser");
 const html_1 = require("html");
 const promises_1 = require("node:fs/promises");
 const path = require("node:path");
+function find_in_level(root, check) {
+    for (let i = 0; i < root.childNodes.length; i++) {
+        const child = root.childNodes[i];
+        if (!child)
+            continue;
+        if (check(child))
+            return child;
+    }
+    return undefined;
+}
+function is_html_element(root) {
+    return root.nodeType === node_html_parser_1.NodeType.ELEMENT_NODE;
+}
+function get_level_text(root) {
+    var res = '';
+    for (let i = 0; i < root.childNodes.length; i++) {
+        const node = root.childNodes[i];
+        if (!node || node.nodeType !== node_html_parser_1.NodeType.TEXT_NODE)
+            continue;
+        res += node.text;
+    }
+    return res;
+}
 class Compiler {
     cwd;
     allow_duplicated_requirements;
@@ -34,8 +57,10 @@ class Compiler {
             for (let i = 0; i < statics.length; i++) {
                 const static_import = statics[i];
                 if (static_import !== undefined) {
-                    const import_path = path.resolve(this.cwd, static_import.innerText);
-                    static_import.replaceWith(await this.load_file(import_path));
+                    const import_path = path.resolve(this.cwd, get_level_text(static_import).trim());
+                    const imported_element = await this.load_file(import_path);
+                    this.replace_placeholders(imported_element, static_import);
+                    static_import.replaceWith(imported_element);
                 }
             }
             statics = root.getElementsByTagName("static-import");
@@ -52,6 +77,31 @@ class Compiler {
                 }
                 static_requirement.remove();
             }
+        }
+        return action_taken;
+    }
+    replace_placeholders(root, param_root) {
+        var placeholders = root.getElementsByTagName("static-placeholder");
+        const action_taken = placeholders.length !== 0;
+        for (let i = 0; i < placeholders.length; i++) {
+            const placeholder = placeholders[i];
+            if (!placeholder)
+                continue;
+            const placeholder_name = placeholder.getAttribute("name");
+            if (!placeholder_name)
+                continue;
+            const parameter = find_in_level(param_root, (child) => {
+                if (!is_html_element(child))
+                    return false;
+                if (child.tagName.toLowerCase() !== "static-parameter")
+                    return false;
+                const parameter_name = child.getAttribute("name");
+                return (placeholder_name === parameter_name);
+            });
+            if (parameter && is_html_element(parameter)) {
+                placeholder.insertAdjacentHTML("beforebegin", parameter.innerHTML);
+            }
+            placeholder.remove();
         }
         return action_taken;
     }
