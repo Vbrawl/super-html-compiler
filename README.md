@@ -81,6 +81,8 @@ html-compile src/index.template.html out/index.html
 | static-import                  | Allows to include external resources to the final html. (Note: The resources are simply copy-pasted)                                            |
 | static-requirement             | Add all contents of this tag to the head of the final html (if a head exists). Can be used to define requirements inside of external resources. |
 | static-requirement-placeholder | Specify a location to put all requirements from <static-requirement> tags                                                                       |
+| static-placeholder             | Allows to replace content dynamically with a <static-import> tag. REQUIRED ATTRIBUTES: name                                                     |
+| static-parameter               | Specifies the contents to use in place of a placeholder. This tag is usable ONLY inside a <static-import> tag. REQUIRED ATTRIBUTES: name        |
 
 
 # CLI options
