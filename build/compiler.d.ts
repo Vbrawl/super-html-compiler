@@ -7,6 +7,7 @@ export declare class Compiler {
     replace_imports(root: HTMLElement): Promise<boolean>;
     replace_requirements(root: HTMLElement, output: HTMLElement): boolean;
     replace_placeholders(root: HTMLElement, param_root: HTMLElement): boolean;
+    replace_attributes(root: HTMLElement): boolean;
     remove_duplicates(container: HTMLElement): boolean;
     place_requirements(root: HTMLElement, fake_head: HTMLElement): boolean;
     load_file(file: string): Promise<HTMLElement>;

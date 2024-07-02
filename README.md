@@ -83,6 +83,7 @@ html-compile src/index.template.html out/index.html
 | static-requirement-placeholder | Specify a location to put all requirements from <static-requirement> tags                                                                       |
 | static-placeholder             | Allows to replace content dynamically with a <static-import> tag. REQUIRED ATTRIBUTES: name                                                     |
 | static-parameter               | Specifies the contents to use in place of a placeholder. This tag is usable ONLY inside a <static-import> tag. REQUIRED ATTRIBUTES: name        |
+| static-attribute               | Allows to set the attribute of the parent to whatever value is between the tags. REQUIRED ATTRIBUTES: name, OPTIONAL ATTRIBUTES: remove-on      |
 
 
 # CLI options

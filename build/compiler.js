@@ -42,6 +42,7 @@ class Compiler {
         while (action_taken) {
             action_taken = false;
             action_taken = await this.replace_imports(root) || action_taken;
+            action_taken = this.replace_attributes(root) || action_taken;
             action_taken = this.replace_requirements(root, fake_head) || action_taken;
         }
         if (!this.allow_duplicated_requirements) {
@@ -102,6 +103,29 @@ class Compiler {
                 placeholder.insertAdjacentHTML("beforebegin", parameter.innerHTML);
             }
             placeholder.remove();
+        }
+        return action_taken;
+    }
+    replace_attributes(root) {
+        var attributes = root.getElementsByTagName("static-attribute");
+        const action_taken = attributes.length !== 0;
+        for (let i = 0; i < attributes.length; i++) {
+            const attribute = attributes[i];
+            if (!attribute)
+                continue;
+            const name = attribute.getAttribute("name");
+            if (!name)
+                continue;
+            const value = get_level_text(attribute);
+            const remove_on = attribute.getAttribute("remove-on");
+            const parent = attribute.parentNode;
+            if (value === remove_on) {
+                parent.removeAttribute(name);
+            }
+            else {
+                parent.setAttribute(name, value);
+            }
+            attribute.remove();
         }
         return action_taken;
     }
